@@ -1,0 +1,51 @@
+﻿@using MayNghien.Models.Response.Base
+@using MiniShop.DTOs.Responses
+@model CategoryResponse
+
+<div class="container mt-3">
+    <h2 class="text-center mb-4">Category Detail</h2>
+    @if (Model != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Desciption</th>
+                        <th>Present</th>
+                        <th>Products</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Name</td>
+                        <td>@Model.Description</td>
+                        <td>@Model.IsPresent</td>
+                        <td>
+                            @if (Model.Products != null && Model.Products.Any())
+                            {
+                                <ul>
+                                    @foreach (var product in Model.Products)
+                                    {
+                                        <li>@product.Name</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>Products not found or deleted</span>
+                            }
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">No categories found.</div>
+    }
+    <a class="btn btn-warning" asp-controller="Category" asp-action="Update" asp-route-id="@Model!.Id">📝 Update</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to list</a>
+</div>

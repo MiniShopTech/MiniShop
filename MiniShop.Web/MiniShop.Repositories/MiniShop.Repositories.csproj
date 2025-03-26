@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Library\Maynghien.Common\Maynghien.Common.csproj" />
+    <ProjectReference Include="..\MiniShop.Commons\MiniShop.Commons.csproj" />
+    <ProjectReference Include="..\MiniShop.DTOs\MiniShop.DTOs.csproj" />
+    <ProjectReference Include="..\MiniShop.Models\MiniShop.Models.csproj" />
+  </ItemGroup>
+
+</Project>
