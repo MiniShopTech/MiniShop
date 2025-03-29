@@ -177,7 +177,7 @@ namespace MiniShop.Services.Implements
                 int pageIndex = request.PageIndex ?? 1;
                 int pageSize = request.PageSize ?? 1;
                 int startIndex = (pageIndex - 1) * pageSize;
-                var categoryList = categories.Skip(startIndex).Take(pageSize).ToListAsync();
+                var categoryList = await categories.Skip(startIndex).Take(pageSize).ToListAsync();
                 var dtoList = _mapper.Map<List<CategoryResponse>>(categoryList);
                 var searchResponse = new SearchResponse<CategoryResponse>
                 {
@@ -185,6 +185,7 @@ namespace MiniShop.Services.Implements
                     TotalPages = CalculateNumOfPages(numOfRecords, pageSize),
                     CurrentPage = pageIndex,
                     Data = dtoList,
+                    RowsPerPage = pageSize
                 };
                 result.Data = searchResponse;
                 result.IsSuccess = true;

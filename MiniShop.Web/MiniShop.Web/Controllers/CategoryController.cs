@@ -17,13 +17,66 @@ namespace MiniShop.Web.Controllers
             _categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string search, string filter, string sort, 
+            int pageIndex = 1, int pageSize = 10)
         {
-            var result = await _categoryService.GetAllAsync();
+            var request = new SearchRequest
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Filters = new List<Filter>()
+            };
             if (!string.IsNullOrEmpty(search))
-                result.Data = result.Data
-                    .Where(c => c.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+            {
+                string fieldName = "Name";
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    switch (filter.ToLower())
+                    {
+                        case "name":
+                            fieldName = "Name";
+                            break;
+                        case "present":
+                            fieldName = "IsPresent";
+                            break;
+                    }
+                }
+                request.Filters.Add(new Filter
+                {
+                    FieldName = fieldName,
+                    Value = search
+                });
+            }
+            if (!string.IsNullOrEmpty(sort))
+            {
+                var sortBy = new SortByInfo();
+                switch (sort.ToLower())
+                {
+                    case "asc":
+                        sortBy.FieldName = "Name";
+                        sortBy.Ascending = true;
+                        break;
+                    case "desc":
+                        sortBy.FieldName = "Name";
+                        sortBy.Ascending = false;
+                        break;
+                    case "newest":
+                        sortBy.FieldName = "CreatedOn";
+                        sortBy.Ascending = false;
+                        break;
+                    case "oldest":
+                        sortBy.FieldName = "CreatedOn";
+                        sortBy.Ascending = true;
+                        break;
+                }
+                request.SortBy = sortBy;
+            }
+            request.Filters.Add(new Filter
+            {
+                FieldName = "IsDeleted",
+                Value = "false"
+            });
+            var result = await _categoryService.SearchAsync(request);
             return View(result);
         }
 
